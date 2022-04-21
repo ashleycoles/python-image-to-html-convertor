@@ -11,7 +11,8 @@ def has_transparency(img) -> bool:
                 return True
     elif img.mode == "RGBA":
         extrema = img.getextrema()
-        if extrema[3][0] < 255:
+        print(extrema)
+        if extrema[3][0] <= 255:
             return True
     return False
 
