@@ -1,7 +1,7 @@
 from generate_html import create_div_pixel
 
 
-def has_transparency(img):
+def has_transparency(img) -> bool:
     if img.info.get("transparency", None) is not None:
         return True
     if img.mode == "P":
@@ -16,7 +16,7 @@ def has_transparency(img):
     return False
 
 
-def generate_div_pixels(width: int, height: int, pixels, img_is_transparent):
+def generate_div_pixels(width: int, height: int, pixels, img_is_transparent: bool) -> str:
     div_pixels = ''
     for y in range(height):
         for x in range(width):
