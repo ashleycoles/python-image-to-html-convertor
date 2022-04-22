@@ -3,22 +3,22 @@ from files import create_destination_file, open_source_image, write_to_destinati
 from generate_html import generate_html_start, generate_html_end
 
 
-def create_rgb_string(red: int, green: int, blue: int):
+def create_hex_colour_string(red: int, green: int, blue: int):
     return '%02x%02x%02x' % (red, green, blue)
 
 
 def generate_rgb_shortcuts(width: int, height: int, pixels):
     shortcut_num = 0
-    rgb_shortcuts = {}
+    hex_shortcuts = {}
     for y in range(height):  # Loop through each row of pixels
         for x in range(width):  # Loop through each column of pixels
             red, green, blue = pixels[x, y]
-            rgb_string = create_rgb_string(red, green, blue)
-            if rgb_string not in rgb_shortcuts:  # Add all unique RGB codes to the list of shortcuts
+            hex_string = create_hex_colour_string(red, green, blue)
+            if hex_string not in hex_shortcuts:  # Add all unique RGB codes to the list of shortcuts
                 # Use an incrementing number for each unique RGB code encountered
-                rgb_shortcuts[rgb_string] = 's' + str(shortcut_num)
+                hex_shortcuts[hex_string] = 's' + str(shortcut_num)
                 shortcut_num += 1
-    return rgb_shortcuts
+    return hex_shortcuts
 
 
 def map_rgb_shortcuts_to_image(img_width: int, img_height: int, img_pixels, img_rgb_shortcuts):
@@ -29,23 +29,23 @@ def map_rgb_shortcuts_to_image(img_width: int, img_height: int, img_pixels, img_
         mapped_shortcuts.append([])
         for x in range(img_width):  # Loop through each column of pixels
             red, green, blue = img_pixels[x, y]
-            rgb_string = create_rgb_string(red, green, blue)
+            rgb_string = create_hex_colour_string(red, green, blue)
             mapped_shortcuts[y].append(img_rgb_shortcuts[rgb_string])  # Get the RGB shortcut for each pixel
     return mapped_shortcuts
 
 
-def generate_rgb_shortcut_css(img_rgb_shortcuts: dict) -> str:
+def generate_shortcut_css(img_hex_shortcuts: dict) -> str:
     css = ''
-    for rgb in img_rgb_shortcuts:
-        css += 'i[' + img_rgb_shortcuts[rgb] + ']{' + 'background:#' + rgb + '}'
+    for hex_code in img_hex_shortcuts:
+        css += 'i[' + img_hex_shortcuts[hex_code] + ']{' + 'background:#' + hex_code + '}'
     return css
 
 
 def generate_html_pixels(shortcuts):
     html_pixels = ''
     for row in shortcuts:
-        for pixel in row:
-            html_pixels += f"<i {pixel}></i>"
+        for pixel_hex in row:
+            html_pixels += f"<i {pixel_hex}></i>"
     return html_pixels
 
 
@@ -62,7 +62,7 @@ width, height = image.size
 rgb_shortcuts = generate_rgb_shortcuts(width, height, pixels)
 mapped_rgb_shortcuts = map_rgb_shortcuts_to_image(width, height, pixels, rgb_shortcuts)
 
-rgb_css = generate_rgb_shortcut_css(rgb_shortcuts)
+rgb_css = generate_shortcut_css(rgb_shortcuts)
 
 result = generate_html_start(width, height, rgb_css)
 result += generate_html_pixels(mapped_rgb_shortcuts)
