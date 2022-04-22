@@ -4,7 +4,7 @@ from generate_html import generate_html_start, generate_html_end
 
 
 def create_rgb_string(red: int, green: int, blue: int):
-    return f"{red}, {green}, {blue}"
+    return '%02x%02x%02x' % (red, green, blue)
 
 
 def generate_rgb_shortcuts(width: int, height: int, pixels):
@@ -37,7 +37,7 @@ def map_rgb_shortcuts_to_image(img_width: int, img_height: int, img_pixels, img_
 def generate_rgb_shortcut_css(img_rgb_shortcuts: dict) -> str:
     css = ''
     for rgb in img_rgb_shortcuts:
-        css += 'i[' + img_rgb_shortcuts[rgb] + ']{' + 'background:rgb(' + rgb + ')}'
+        css += 'i[' + img_rgb_shortcuts[rgb] + ']{' + 'background:#' + rgb + '}'
     return css
 
 
